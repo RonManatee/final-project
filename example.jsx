@@ -223,6 +223,19 @@ function myVehicle({ model, registration: { state } }) {
         //A SIMPLER METHOD OF TERNARY instead of the "if/else"
         authenticated ? renderApp() : renderLogin();
 
+function Goal(props) {
+  const isGoal = props.isGoal;
+  return (
+    <>
+      { isGoal ? <MadeGoal/> : <MissedGoal/> }
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Goal isGoal={false} />); //since isGoal=false operation retuns MISSED
+    
+
   //RENDER HTML
       //createRoot() is to define the hHTML element where a React component should be displayed.
       //render() called to define the React component that should be rendered. 
@@ -317,6 +330,118 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<Football />);
 
 //PASSING ARGUMENTS, to pass an argument to an event handler, use an arrow function
-    <button onClick ={() => shoot("Goal!")}>Take the shot!</button> //returns with Goal upon button click
+  function Football() {
+  const shoot = (a) => {
+    alert(a);
+  }
 
-        
+  return (
+    <button onClick={() => shoot("Goal!")}>Take the shot!</button>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Football />);
+
+//REACT EVENT OBJECT, have access to the React event tat triggered the function.
+  //Arrow function: sending event object manually
+       function Football() {
+  const shoot = (a, b) => {
+    alert(b.type);
+    /*
+    'b' represents the React event that triggered the function,
+    in this case the 'click' event
+    */
+  }
+
+  return (
+    <button onClick={(event) => shoot("Goal!", event)}>Take the shot!</button>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Football />);   
+
+//if STATEMENTS, use the 'if' JS operator to decide which component to render
+    function MissedGoal() {
+  return <h1>MISSED!</h1>;
+}
+
+function MadeGoal() {
+  return <h1>Goal!</h1>;
+}
+          function Goal(props) {
+  const isGoal = props.isGoal;
+  if (isGoal) {
+    return <MadeGoal/>;
+  }
+  return <MissedGoal/>;
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Goal isGoal={false} />); //since isGoal=False return is MISSED
+
+//LOGICAL && OPERATOR, another way to conditionally render a React component 
+    //can embed JS expressions in JSX by using curly braces
+  function Garage(props) {
+  const cars = props.cars;
+  return (
+    <>
+      <h1>Garage</h1>
+      {cars.length > 0 && //this adds cars.length into the garage operation
+        <h2>
+          You have {cars.length} cars in your garage.
+        </h2>
+      }
+    </>
+  );
+}
+
+const cars = ['Ford', 'BMW', 'Audi']; //provides number of cars in array
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Garage cars={cars} />); //since there are 3 cars in the cars const, operation returns "you have 3 cars in your garage"
+
+  //REACT LISTS, render lists with some type of loop, JS map() method is generally preferred.
+    function Car(props) {
+  return <li>I am a { props.brand }</li>;
+}
+
+function Garage() {
+  const cars = ['Ford', 'BMW', 'Audi'];
+  return (
+    <>
+      <h1>Who lives in my garage?</h1>
+      <ul>
+        {cars.map((car) => <Car brand={car} />)} //pulls info from const cars and makes a list of responses
+      </ul>
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Garage />);  //operator returns 'I am a Ford/BMW/Audi' on their own line
+
+  //KEYS, allow React to keep track of elements. This way, if an item is updated or removed, only that item will be re-rendered
+      //instead of the entire list. Keys need to be unique to each sibling. They can be duplicated globally.
+    function Car(props) {
+  return <li>I am a { props.brand }</li>;
+}
+
+function Garage() {
+  const cars = [
+    {id: 1, brand: 'Ford'},
+    {id: 2, brand: 'BMW'},
+    {id: 3, brand: 'Audi'}
+  ];
+  return (    //car key={car.id} = 1,2,3 in order, brand={car.brand} returns the brand in order of key.
+    <>
+      <h1>Who lives in my garage?</h1>
+      <ul>  
+        {cars.map((car) => <Car key={car.id} brand={car.brand} />)} 
+      </ul>
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Garage />);
